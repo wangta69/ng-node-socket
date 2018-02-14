@@ -41,6 +41,25 @@ export class SocketService {
 			this.socket.emit(args[0], args[1], args[2], args[3]);
 	}
 
+	EmitCallback(callback:Function, ...args:any[]){
+		if(args.length == 1)
+		this.socket.emit(args[0], function(obj){
+			callback(obj);
+		});
+		if(args.length == 2)
+			this.socket.emit(args[0], args[1], function(obj){
+				callback(obj);
+			});
+		else if(args.length == 3)
+			this.socket.emit(args[0], args[1], args[2], function(obj){
+				callback(obj);
+			});
+		else
+			this.socket.emit(args[0], args[1], args[2], args[3], function(obj){
+				callback(obj);
+			});
+	}
+
 	removeAllListener(eventName, callback) {
 		this.socket.removeAllListeners(eventName, function() {
 			var args = arguments;
@@ -48,9 +67,6 @@ export class SocketService {
 	}
 
 	removeListener(connection, callback?){
-
-	//	return;
-
 		let sConn;
 		eval('sConn = this.sockConnection.'+connection) ;
 		if(typeof sConn == 'undefined')

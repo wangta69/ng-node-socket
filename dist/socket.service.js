@@ -14,20 +14,13 @@ var Observable_1 = require("rxjs/Observable");
 var io = require("socket.io-client");
 var SocketService = (function () {
     function SocketService() {
-        //private url = 'http://182.162.136.223:3001';
-        this.url = 'http://182.162.136.223:50000';
-        /**
-        * 이후 다른 것들도 이곳에서 chattab을 관리한다.
-        * publicChat : 공개 채팅방 관련 socket 처리
-        * chanceTalkView : 찬스톡 상세 보기
-        chatRoom: 채팅룸 리스트
-        */
-        this.sockConnection = { publicChat: [], chanceTalkView: [], chatRoom: [], chatRoomView: [] };
-        this.Rooms = []; //일부 방(chancetalk, chatRoom)들은 랜덤 명이기 때문에 이곳에 저장해 두었다가 일괄적으로 방을 떠난다.
-        this.init();
+        this.url = 'http://xxx.xxx.xxx.xxx:portNumber';
+        this.sockConnection = {};
+        this.Rooms = [];
     }
-    SocketService.prototype.init = function () {
+    SocketService.prototype.init = function (url) {
         var _this = this;
+        this.url = url;
         this.socket = io(this.url);
         this.On('connection').subscribe(function (obj) {
             var my_data = obj;
@@ -40,20 +33,6 @@ var SocketService = (function () {
             //console.log(obj);
         }); //로그인 정보를 node에 전달한다.
     };
-    //	sendMessage(message){
-    //		this.this.socketService.Emit('add-message', message);
-    //	}
-    /**
-    * 모든 emit은 이곳에서 처리한다.
-    */
-    /*
-    Emit(key, obj?){
-        if(typeof obj == 'undefined')
-            this.socket.emit(key);
-        else
-            this.socket.emit(key, obj);
-    }
-    */
     SocketService.prototype.Emit = function () {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
@@ -66,13 +45,30 @@ var SocketService = (function () {
         else
             this.socket.emit(args[0], args[1], args[2], args[3]);
     };
+    SocketService.prototype.EmitCallback = function (callback) {
+        var args = [];
+        for (var _i = 1; _i < arguments.length; _i++) {
+            args[_i - 1] = arguments[_i];
+        }
+        if (args.length == 2)
+            this.socket.emit(args[0], args[1], function (obj) {
+                callback(obj);
+            });
+        else if (args.length == 3)
+            this.socket.emit(args[0], args[1], args[2], function (obj) {
+                callback(obj);
+            });
+        else
+            this.socket.emit(args[0], args[1], args[2], args[3], function (obj) {
+                callback(obj);
+            });
+    };
     SocketService.prototype.removeAllListener = function (eventName, callback) {
         this.socket.removeAllListeners(eventName, function () {
             var args = arguments;
         });
     };
     SocketService.prototype.removeListener = function (connection, callback) {
-        //	return;
         var sConn;
         eval('sConn = this.sockConnection.' + connection);
         if (typeof sConn == 'undefined')
@@ -98,19 +94,6 @@ var SocketService = (function () {
         }
         this.Rooms = [];
     };
-    /*
-        On(key) {//하나의 인자값을 받는다.
-            let observable = new Observable(observer => {
-                this.socket.on(key, (data) => {
-                    observer.next(data);
-                });
-                return () => {//unsubscribe 시 socket자체가 disconnect되는 것을 방지하기 위해 아래는 주석 처리한다.
-                    //this.socket.disconnect();
-                };
-            })
-            return observable;
-        }
-    */
     SocketService.prototype.On = function (key) {
         var _this = this;
         var observable = new Observable_1.Observable(function (observer) {

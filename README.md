@@ -4,28 +4,31 @@ Tested for angular5
 
 ## Installation
 ```
-npm install ng-rest-http
+npm install ng-node-socket
 ```
 
 ## How to use
 ``` app.module.ts
-import { RestHttpClient } from 'ng-rest-http'
+import { SocketService } from ng-node-socket'
 @NgModule({
-  providers: [  RestHttpClient ]
+  providers: [  SocketService ]
 })
 
 ```
 
 ``` app.componet.ts
-import { RestHttpClient } from 'ng-rest-http'
+import { SocketService } from 'ng-node-socket'
 
 export class AComponent{
-    constructor(protected http:RestHttpClient){}
+    constructor(protected socket:SocketService){
+        socket.init('http://182.162.136.223:50000');
 
-    private get_exchange_rate(){
-        this.http.get({url:'what you want'}, function(data){
-            console.log(data)
-        }.bind(this));
+         this.socket.Emit('someThing1');
+         this.socket.Emit(function(data){console.log(data)}, 'someThing1');
+         this.socket.On('someThing2').subscribe(obj => {
+            console.log(obj);
+		});
+
     }
 }
 ```

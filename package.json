@@ -1,6 +1,6 @@
 {
-  "name": "ng-node",
-  "version": "1.0.0",
+  "name": "ng-node-socket",
+  "version": "1.0.2",
   "description": "angular nodejs ",
   "main": "./dist/socket.service.js",
   "types": "./dist/socket.service.d.ts",
@@ -26,7 +26,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wangta69//ng-node.git"
+    "url": "git+https://github.com/wangta69/ng-node.git"
   },
   "keywords": [
     "http",
@@ -38,5 +38,8 @@
   "bugs": {
     "url": "https://github.com/wangta69/ng-node/issues"
   },
-  "homepage": "https://github.com/wangta69/ng-nodet#readme"
+  "homepage": "https://github.com/wangta69/ng-node#readme",
+  "directories": {
+    "test": "test"
+  }
 }
