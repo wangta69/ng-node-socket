@@ -26,9 +26,9 @@ export class SocketService {
 
 	setLogin(){
 		let socket_login:any = {};//이곳에 현재 보는 그래프의 기본 정보도 전달
-		this.Emit('login', socket_login, function(obj){
+		this.EmitCallback(function(obj){
 			//console.log(obj);
-		});//로그인 정보를 node에 전달한다.
+		},'login', socket_login);//로그인 정보를 node에 전달한다.
 	}
 
 
@@ -42,22 +42,23 @@ export class SocketService {
 	}
 
 	EmitCallback(callback:Function, ...args:any[]){
-		if(args.length == 1)
-		this.socket.emit(args[0], function(obj){
-			callback(obj);
-		});
-		if(args.length == 2)
+		if(args.length == 1){
+    		this.socket.emit(args[0], function(obj){
+    			callback(obj);
+    		});
+		}else if(args.length == 2){
 			this.socket.emit(args[0], args[1], function(obj){
 				callback(obj);
 			});
-		else if(args.length == 3)
+		}else if(args.length == 3){
 			this.socket.emit(args[0], args[1], args[2], function(obj){
 				callback(obj);
 			});
-		else
+		}else{
 			this.socket.emit(args[0], args[1], args[2], args[3], function(obj){
 				callback(obj);
 			});
+        }
 	}
 
 	removeAllListener(eventName, callback) {
@@ -83,9 +84,9 @@ export class SocketService {
 
 	}
 
-	addRoom(room){
+	joinRoom(room){
 		this.Rooms.push(room);
-		this.Emit("add_page", {page:room});
+		this.Emit("joinRoom", {room:room});
 	}
 
 	leaveRoom(){

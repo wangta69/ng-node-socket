@@ -1,4 +1,4 @@
-# ng-rest-http
+# ng-node-socket
 
 Tested for angular5
 
@@ -24,7 +24,8 @@ export class AComponent{
         socket.init('http://182.162.136.223:50000');
 
          this.socket.Emit('someThing1');
-         this.socket.Emit(function(data){console.log(data)}, 'someThing1');
+         this.socket.Emit('someThing1', arg1, ....);
+         this.socket.EmitCallback(function(data){console.log(data)}, 'someThing1');
          this.socket.On('someThing2').subscribe(obj => {
             console.log(obj);
 		});
