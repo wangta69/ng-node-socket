@@ -1,7 +1,6 @@
 import { Injectable, ReflectiveInjector } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
-
-//import * as io from 'socket.io-client';
+// import * as io from 'socket.io-client';
 import io from 'socket.io-client';
 
 @Injectable()
