@@ -1,7 +1,8 @@
 import { Injectable, ReflectiveInjector } from '@angular/core';
 import { Subject, Observable } from 'rxjs';
 
-import * as io from 'socket.io-client';
+//import * as io from 'socket.io-client';
+import io from 'socket.io-client';
 
 @Injectable()
 export class SocketService {
@@ -18,14 +19,6 @@ export class SocketService {
 
         this.socket = io(this.url);
     }
-
-    setLogin () {
-        const socket_login: any = {}; // 이곳에 현재 보는 그래프의 기본 정보도 전달
-        this.EmitCallback(function(obj) {
-            // console.log(obj);
-        }, 'login', socket_login); // 로그인 정보를 node에 전달한다.
-    }
-
 
     Emit(...args: any[]) {
         if (args.length === 2) {
@@ -64,8 +57,6 @@ export class SocketService {
     }
 
     removeListener (connection, callback?) {
-        // let sConn;
-        // eval('sConn = this.sockConnection.' + connection) ;
         const sConn = this.sockConnection[connection];
         if (typeof sConn === 'undefined') {
             return;
@@ -75,13 +66,30 @@ export class SocketService {
             for (let i = 0; i < sConn.length; i++) {
                 sConn[i].unsubscribe();
             }
-            // eval(');
             this.sockConnection[connection] = [];
         }
         if (typeof callback === 'function') {
             callback();
         }
 
+    }
+
+    On (key) { // 두개의 인자값을 받아서 하나의 object로 결합하워 callback
+        const observable = new Observable(observer => {
+            this.socket.on(key, (...arg: any[]) => {
+                observer.next(arg);
+            });
+            return () => { // unsubscribe 시 socket자체가 disconnect되는 것을 방지하기 위해 아래는 주석 처리한다.
+                // this.socket.disconnect();
+            };
+        });
+        return observable;
+    }
+
+    setLogin () {
+        const socket_login: any = {}; // 이곳에 현재 보는 그래프의 기본 정보도 전달
+        this.EmitCallback(function(obj) {
+        }, 'login', socket_login); // 로그인 정보를 node에 전달한다.
     }
 
     joinRoom (room) {
@@ -96,18 +104,5 @@ export class SocketService {
         }
 
         this.Rooms = [];
-    }
-
-
-    On (key) { // 두개의 인자값을 받아서 하나의 object로 결합하워 callback
-        const observable = new Observable(observer => {
-            this.socket.on(key, (...arg: any[]) => {
-                observer.next(arg);
-            });
-            return () => { // unsubscribe 시 socket자체가 disconnect되는 것을 방지하기 위해 아래는 주석 처리한다.
-                // this.socket.disconnect();
-            };
-        });
-        return observable;
     }
 }

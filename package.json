@@ -1,45 +1,27 @@
 {
   "name": "ng-node-socket",
   "version": "1.0.2",
-  "description": "angular nodejs ",
-  "main": "./dist/socket.service.js",
-  "types": "./dist/socket.service.d.ts",
-  "dependencies": {
-    "@angular/common": "^5.0.0",
-    "@angular/compiler": "^5.0.0",
-    "@angular/core": "^5.0.0",
-    "@angular/http": "^5.0.0",
-    "rxjs": "^5.5.2",
-    "socket.io-client": "^2.0.4"
+  "peerDependencies": {
+    "@angular/common": "^6.0.0-rc.0 || ^6.0.0",
+    "@angular/core": "^6.0.0-rc.0 || ^6.0.0"
   },
-  "devDependencies": {
-    "@angular/cli": "1.6.2",
-    "@angular/compiler-cli": "^5.0.0",
-    "@types/node": "~6.0.60",
-    "tslint": "~5.7.0",
-    "typescript": "~2.4.2"
-  },
+  "description": "Tested for angular6",
+  "main": "karma.conf.js",
   "scripts": {
-    "prepublish": "npm run build",
-    "build": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/wangta69/ng-node.git"
+    "url": "ng-node"
   },
   "keywords": [
-    "http",
-    "httpClient",
+    "node",
+    "socket",
     "angular"
   ],
   "author": "pondol",
   "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/wangta69/ng-node/issues"
-  },
-  "homepage": "https://github.com/wangta69/ng-node#readme",
-  "directories": {
-    "test": "test"
+  "peerDependencies": {
+    "socket.io-client": "^2.1.1"
   }
 }

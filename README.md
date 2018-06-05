@@ -9,7 +9,7 @@ npm install ng-node-socket
 
 ## How to use
 ``` app.module.ts
-import { SocketService } from ng-node-socket'
+import { SocketService } from 'ng-node-socket';
 @NgModule({
   providers: [  SocketService ]
 })
@@ -17,11 +17,15 @@ import { SocketService } from ng-node-socket'
 ```
 
 ``` app.componet.ts
-import { SocketService } from 'ng-node-socket'
+import { SocketService } from 'ng-node-socket';
 
-export class AComponent{
-    constructor(protected socket:SocketService){
+export class AComponent {
+    constructor(protected socket:SocketService) {
         socket.init('http://182.162.136.223:50000');
+
+        this.socket.On('connection').subscribe(obj => {
+           console.log(obj);
+       });
 
          this.socket.Emit('someThing1');
          this.socket.Emit('someThing1', arg1, ....);
@@ -33,3 +37,5 @@ export class AComponent{
     }
 }
 ```
+
+##### if you got an error 'global is not defined' please put '(window as any).global = window;' to your polyfills.ts or elsewhere what you want
