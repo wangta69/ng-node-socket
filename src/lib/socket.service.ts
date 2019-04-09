@@ -6,16 +6,15 @@ import io from 'socket.io-client';
 @Injectable()
 export class SocketService {
     private url = 'http://xxx.xxx.xxx.xxx:portNumber';
-    private _socket;
+    private _socket: any;
 
     _onSubscribes: any = {}; //
     Rooms = [];
 
     constructor() {}
 
-    init (url) {
+    init (url: string) {
         this.url = url;
-
         this._socket = io(this.url);
     }
 
@@ -23,7 +22,7 @@ export class SocketService {
     *@param Object obj {key: value}
     // this.socketonSubscribes = this.socket.On('myOn').subscribe(data => {...
     */
-    setOnSubscribes (group, key, observable) {
+    setOnSubscribes (group: string, key: string, observable: any) {
         if (!this._onSubscribes[group]) {
             this._onSubscribes[group] = {};
         }
@@ -49,34 +48,34 @@ export class SocketService {
 
     EmitCallback (callback: Function, ...args: any[]) {
         if (args.length === 1) {
-            this._socket.emit(args[0], function(obj) {
+            this._socket.emit(args[0], (obj: any) => {
                 callback(obj);
             });
         } else if (args.length === 2) {
-            this._socket.emit(args[0], args[1], function(obj) {
+            this._socket.emit(args[0], args[1], (obj: any) => {
                 callback(obj);
             });
         } else if (args.length === 3) {
-            this._socket.emit(args[0], args[1], args[2], function(obj) {
+            this._socket.emit(args[0], args[1], args[2], (obj: any) =>  {
                 callback(obj);
             });
         } else {
-            this._socket.emit(args[0], args[1], args[2], args[3], function(obj) {
+            this._socket.emit(args[0], args[1], args[2], args[3], (obj: any) => {
                 callback(obj);
             });
         }
     }
 
-    removeAllListener (eventName, callback) {
-        this._socket.removeAllListeners(eventName, function() {
-            const args = arguments;
+    removeAllListener (eventName: string) {
+        this._socket.removeAllListeners(eventName, () => {
+            // const args = arguments;
         });
     }
 
     /**
     * remove On subscribe involved in a certain group
     */
-    removeListeners (subscribes, callback?) {
+    removeListeners (subscribes: any, callback?: (body: any) => void) {
         console.log('removeListeners');
         console.log('subscribes:' + subscribes);
         const sConn = this._onSubscribes[subscribes];
@@ -87,11 +86,13 @@ export class SocketService {
             }
             return;
         }
-        console.log(sConn);
+        // console.log(sConn);
 
-        for (let entry in sConn) {
-            console.log(entry); // 1, "string", false
-            sConn[entry].unsubscribe();
+        for (const entry in sConn) {
+        //    console.log(entry); // 1, "string", false
+            if (sConn.hasOwnProperty(entry)) {
+                sConn[entry].unsubscribe();
+            }
         }
 
 /*
@@ -108,7 +109,7 @@ export class SocketService {
 
     }
 
-    On (key) { // 두개의 인자값을 받아서 하나의 object로 결합하워 callback
+    On (key: string) { // 두개의 인자값을 받아서 하나의 object로 결합하워 callback
         const observable = new Observable(observer => {
             this._socket.on(key, (...arg: any[]) => {
                 observer.next(arg);
@@ -120,7 +121,7 @@ export class SocketService {
         return observable;
     }
 
-    receive (grp, key) { // 두개의 인자값을 받아서 하나의 object로 결합하워 callback
+    receive (grp: string, key: string) { // 두개의 인자값을 받아서 하나의 object로 결합하워 callback
         const observable = new Observable(observer => {
             this._socket.on(key, (...arg: any[]) => {
                 observer.next(arg);
@@ -139,11 +140,11 @@ export class SocketService {
 
     setLogin () {
         const socket_login: any = {}; // 이곳에 현재 보는 그래프의 기본 정보도 전달
-        this.EmitCallback(function(obj) {
+        this.EmitCallback(() => {
         }, 'login', socket_login); // 로그인 정보를 node에 전달한다.
     }
 
-    joinRoom (room) {
+    joinRoom (room: string) {
         this.Rooms.push(room);
         this.Emit('joinRoom', {room: room});
     }
