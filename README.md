@@ -8,6 +8,7 @@ npm install ng-node-socket
 ```
 
 ## How to use
+### single socket connection
 -- app.module.ts
 ```
 import { SocketService } from 'ng-node-socket';
@@ -34,6 +35,34 @@ export class AComponent {
         this.socket.On('someThing2').subscribe(obj => {
             console.log(obj);
 		});
+    }
+}
+```
+
+### multi socket connection
+-- app.module.ts
+```
+import { SocketService } from 'ng-node-socket';
+@NgModule({
+  providers: [  SocketService ]
+})
+
+```
+-- app.componet.ts
+```
+import { SocketMultiService } from 'ng-node-socket';
+
+export class AComponent {
+    constructor(protected socket:SocketMultiService) {
+        socket.init('name1', 'http://xxx.xxx.xxx.xxx:port1');
+        socket.init('name2', 'http://xxx.xxx.xxx.xxx:port2');
+
+        this.socket.On('name1', 'connection').subscribe(obj => {
+           console.log(obj);
+        });
+
+        this.socket.Emit('name1','someThing1');
+        this.socket.Emit('name2','someThing1', arg1, ....);
     }
 }
 ```

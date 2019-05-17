@@ -1,11 +1,10 @@
 {
   "name": "ng-node-socket",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "peerDependencies": {
-    "@angular/common": "^6.0.0-rc.0 || ^6.0.0",
-    "@angular/core": "^6.0.0-rc.0 || ^6.0.0"
+    "socket.io-client": "^2.1.1"
   },
-  "description": "Tested for angular6",
+  "description": "Tested for angular6, angular7",
   "main": "karma.conf.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
@@ -20,8 +19,5 @@
     "angular"
   ],
   "author": "pondol",
-  "license": "MIT",
-  "peerDependencies": {
-    "socket.io-client": "^2.1.1"
-  }
+  "license": "MIT"
 }
