@@ -1,71 +1,70 @@
 import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
-// import * as io from 'socket.io-client';
 import io from 'socket.io-client';
 
 @Injectable()
 export class SocketService {
     private url = 'http://xxx.xxx.xxx.xxx:portNumber';
-    private _socket: any;
+    private Socket: any;
 
-    _onSubscribes: any = {}; //
-    Rooms = [];
+    private onSubscribes: any = {}; //
+    private Rooms = [];
 
     constructor() {}
 
-    init(url: string) {
+    public init(url: string): void {
         this.url = url;
-        this._socket = io(this.url);
+        this.Socket = io(this.url);
     }
 
     /**
-    *@param Object obj {key: value}
-    // this.socketonSubscribes = this.socket.On('myOn').subscribe(data => {...
-    */
-    setOnSubscribes(group: string, key: string, observable: any) {
-        if (!this._onSubscribes[group]) {
-            this._onSubscribes[group] = {};
+     * @param Object obj {key: value}
+     * this.SocketonSubscribes = this.Socket.On('myOn').subscribe(data => {...
+     */
+    public setOnSubscribes(group: string, key: string, observable: any): void {
+        if (!this.onSubscribes[group]) {
+            this.onSubscribes[group] = {};
         }
 
-        this._onSubscribes[group][key] = observable;
+        this.onSubscribes[group][key] = observable;
     }
 
-    get socket() {
-        return this._socket;
+    get socket(): any {
+        return this.Socket;
     }
 
-    Emit(...args: any[]) {
+    public Emit(...args: any[]): void {
         if (args.length === 2) {
-            this._socket.emit(args[0], args[1]);
+            this.Socket.emit(args[0], args[1]);
         } else if (args.length === 3) {
-            this._socket.emit(args[0], args[1], args[2]);
+            this.Socket.emit(args[0], args[1], args[2]);
         } else {
-            this._socket.emit(args[0], args[1], args[2], args[3]);
+            this.Socket.emit(args[0], args[1], args[2], args[3]);
         }
     }
 
-    EmitCallback(callback: Function, ...args: any[]) {
+    public EmitCallback(callback: (body: any) => void, ...args: any[]): void {
         if (args.length === 1) {
-            this._socket.emit(args[0], (obj: any) => {
+            this.Socket.emit(args[0], (obj: any) => {
                 callback(obj);
             });
         } else if (args.length === 2) {
-            this._socket.emit(args[0], args[1], (obj: any) => {
+            this.Socket.emit(args[0], args[1], (obj: any) => {
                 callback(obj);
             });
         } else if (args.length === 3) {
-            this._socket.emit(args[0], args[1], args[2], (obj: any) =>  {
+            this.Socket.emit(args[0], args[1], args[2], (obj: any) =>  {
                 callback(obj);
             });
         } else {
-            this._socket.emit(args[0], args[1], args[2], args[3], (obj: any) => {
+            this.Socket.emit(args[0], args[1], args[2], args[3], (obj: any) => {
                 callback(obj);
             });
         }
     }
 
-    removeAllListener(eventName: string) {
-        this._socket.removeAllListeners(eventName, () => {
+    public removeAllListener(eventName: string): void {
+        this.Socket.removeAllListeners(eventName, () => {
             // const args = arguments;
         });
     }
@@ -73,13 +72,12 @@ export class SocketService {
     /**
      * remove On subscribe involved in a certain group
      */
-    removeListeners(subscribes: any, callback?: (body: any) => void) {
-        const sConn = this._onSubscribes[subscribes];
+    public removeListeners(subscribes: any, callback?: (body: any) => void): void {
+        const sConn = this.onSubscribes[subscribes];
         if (typeof sConn === 'undefined') {
             if (typeof callback === 'function') {
                 callback(true);
             }
-            return;
         }
 
         for (const entry in sConn) {
@@ -93,54 +91,51 @@ export class SocketService {
         }
     }
 
-    On(key: string) { // 두개의 인자값을 받아서 하나의 object로 결합하워 callback
-        const observable = new Observable(observer => {
-            this._socket.on(key, (...arg: any[]) => {
+    public On(key: string): any { // 두개의 인자값을 받아서 하나의 object로 결합하워 callback
+        const observable = new Observable((observer) => {
+            this.Socket.on(key, (...arg: any[]) => {
                 observer.next(arg);
             });
-            return () => { // unsubscribe 시 _socket자체가 disconnect되는 것을 방지하기 위해 아래는 주석 처리한다.
-                // this._socket.disconnect();
+            return () => { // unsubscribe 시 socket자체가 disconnect되는 것을 방지하기 위해 아래는 주석 처리한다.
+                // this.Socket.disconnect();
             };
         });
         return observable;
     }
 
-    receive(grp: string, key: string) { // 두개의 인자값을 받아서 하나의 object로 결합하워 callback
-        const observable = new Observable(observer => {
-            this._socket.on(key, (...arg: any[]) => {
+    public receive(grp: string, key: string): any { // 두개의 인자값을 받아서 하나의 object로 결합하워 callback
+        const observable = new Observable((observer) => {
+            this.Socket.on(key, (...arg: any[]) => {
                 observer.next(arg);
             });
-            return () => { // unsubscribe 시 _socket자체가 disconnect되는 것을 방지하기 위해 아래는 주석 처리한다.
-                // this._socket.disconnect();
+            return () => { // unsubscribe 시 socket자체가 disconnect되는 것을 방지하기 위해 아래는 주석 처리한다.
+                // this.Socket.disconnect();
             };
         });
         this.setOnSubscribes (grp, key, observable);
         return observable;
     }
 
-    disconnect() {
-        this._socket.disconnect();
+    public disconnect(): void {
+        this.Socket.disconnect();
     }
 
-    setLogin() {
-        const socket_login: any = {}; // 이곳에 현재 보는 그래프의 기본 정보도 전달
+    public setLogin(): void {
+        const socketLogin: any = {};
         this.EmitCallback(() => {
-        }, 'login', socket_login); // 로그인 정보를 node에 전달한다.
+        }, 'login', socketLogin); // 로그인 정보를 node에 전달한다.
     }
 
-    joinRoom(room: string) {
+    public joinRoom(room: string): void {
         this.Rooms.push(room);
-        this.Emit('joinRoom', {room: room});
+        this.Emit('joinRoom', {room});
     }
 
-    leaveRoom() {
-        for (let i = 0; i < this.Rooms.length; i++) {
-            const room = this.Rooms[i];
+    public leaveRoom(): void {
+        for (const room of this.Rooms) {
             this.Emit('leave_curent_room', room);
         }
 
         this.Rooms = [];
     }
-
-
 }
