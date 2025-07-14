@@ -2,7 +2,9 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import io from 'socket.io-client';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root',
+})
 export class SocketMultiService {
     private sockets: any = {}; // {socketName: io}
     constructor() {}

@@ -3,4 +3,4 @@
  */
 
 export * from './lib/socket.service';
-export * from '././lib/msocket.service';
+export * from './lib/mSocket.service';

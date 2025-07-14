@@ -1,27 +1,41 @@
 {
   "name": "ng-node-socket",
-  "version": "1.2.1",
-  "peerDependencies": {
-    "socket.io-client": "^2.3.0"
-  },
-  "description": "Tested for angular10",
-  "repository": {
-    "type": "git",
-    "url": "ng-node"
-  },
-  "keywords": [
-    "node",
-    "socket",
-    "angular"
-  ],
+  "version": "3.0.10",
+  "description": "Angular-compatible socket.io wrapper (tested for Angular 10+)",
   "author": "pondol",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wangta69/ng-node-socket.git"
+  },
+  "keywords": [
+    "angular",
+    "socket.io",
+    "node",
+    "wrapper"
+  ],
+  "peerDependencies": {
+    "socket.io-client": "^4.7.2"
+  },
   "dependencies": {
     "tslib": "^2.0.0"
   },
-  "main": "karma.conf.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "main": "bundles/ng-node-socket.umd.js",
+  "module": "fesm2022/ng-node-socket.mjs",
+  "types": "public-api.d.ts",
+  "exports": {
+      "types": "./public-api.d.ts",
+      "default": "./fesm2022/ng-node-socket.mjs"
   },
-  "devDependencies": {}
+  "files": [
+    "fesm2022/",
+    "esm2022/",
+    "lib/",
+    "index.d.ts",
+    "public-api.d.ts",
+    "README.md"
+  ],
+  "scripts": {
+    "test": "echo \"No test configured\" && exit 0"
+  }
 }

@@ -4,7 +4,8 @@ Tested for angular5
 
 ## Installation
 ```
-npm install ng-node-socket
+npm i ng-node-socket
+npm i socket.io-client
 ```
 
 ## How to use

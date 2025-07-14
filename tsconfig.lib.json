@@ -5,21 +5,17 @@
     "outDir": "../../out-tsc/lib",
     "target": "es2015",
     "declaration": true,
+    "declarationMap": false,
     "inlineSources": true,
-    "allowSyntheticDefaultImports":true,
+    "allowSyntheticDefaultImports": true,
     "types": [],
-    "lib": [
-      "dom",
-      "es2018"
-    ]
+    "lib": ["dom", "es2018"]
   },
   "angularCompilerOptions": {
-    "skipTemplateCodegen": true,
-    "strictMetadataEmit": true,
-    "enableResourceInlining": true
+    "compilationMode": "partial",
+    "enableResourceInlining": true,
+    "strictMetadataEmit": true
   },
-  "exclude": [
-    "src/test.ts",
-    "**/*.spec.ts"
-  ]
+  "exclude": ["src/test.ts", "**/*.spec.ts"]
 }
+
