@@ -1,7 +1,7 @@
 {
   "name": "ng-node-socket",
-  "version": "3.0.10",
-  "description": "Angular-compatible socket.io wrapper (tested for Angular 10+)",
+  "version": "3.0.13",
+  "description": "Angular-compatible socket.io wrapper (tested for Angular 18+)",
   "author": "pondol",
   "license": "MIT",
   "repository": {
@@ -20,12 +20,21 @@
   "dependencies": {
     "tslib": "^2.0.0"
   },
+  "devDependencies": {
+    "@types/socket.io-client": "^3.0.0"
+  },
   "main": "bundles/ng-node-socket.umd.js",
   "module": "fesm2022/ng-node-socket.mjs",
   "types": "public-api.d.ts",
   "exports": {
+    ".": {
       "types": "./public-api.d.ts",
+      "esm2022": "./esm2022/ng-node-socket.mjs",
       "default": "./fesm2022/ng-node-socket.mjs"
+    },
+    "./package.json": {
+      "default": "./package.json"
+    }
   },
   "files": [
     "fesm2022/",
